@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using Algorithm_Chart.Constants;
-using Algorithm_Chart.Models.Commands;
 using LiveCharts;
 
 namespace Algorithm_Chart.Models

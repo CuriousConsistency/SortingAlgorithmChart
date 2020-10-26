@@ -21,8 +21,6 @@ C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Generated
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Styles\Styles.baml
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Views\AlgorithmVisualiser.baml
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csproj.CopyComplete
-C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csprojAssemblyReference.cache
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.baml
-C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmButtons.g.cs
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.g.cs
-C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmButtons.baml
+C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csprojAssemblyReference.cache

@@ -34,6 +34,11 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <Slider DataContext="{Binding }" Style="{StaticResource SliderStyle}" Minimum="{Binding Path=MinimumArraySize}" Maximum="{Binding Path=MaximumArraySize}" 
+                    TickFrequency="5" Value="{Binding Path=ArraySize, Mode=TwoWay}">
+            </Slider>
+        </StackPanel>
         <uc:AlgorithmBarChart Style="{StaticResource GraphStyle}" Grid.Column="1" Grid.RowSpan="2" Value="{Binding DataSet}"/>
     </Grid>
 </Window>

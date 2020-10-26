@@ -3,10 +3,9 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Algorithm_Chart.Constants;
 using Algorithm_Chart.Models;
-using Algorithm_Chart.Models.Commands;
 using LiveCharts;
 using LiveCharts.Wpf;
 
@@ -16,13 +15,23 @@ namespace Algorithm_Chart.ViewModels
     {
         public SeriesCollection DataSet { get; private set; }
 
-        private readonly int startingArraySize = 20;
+        public int MinimumArraySize { get; } = 10;
 
-        private readonly int startingUpperBound = 100;
+        public int MaximumArraySize { get; } = 50;
+
+        private readonly int UpperBound = 100;
+
+        public int ArraySize { get; set; } = 20;
 
         public ObservableCollection<IAlgorithm> Algorithms { get; private set; }
 
+        public bool Executing { get; private set; }
+
         public int sortingDelay { get; private set; } = 50;
+
+        private bool Sorted;
+
+        private SeriesCollection UnsortedDataset;
 
         /// <summary>
         /// Occurs when changes occur that affect whether or not the command 
@@ -49,41 +58,42 @@ namespace Algorithm_Chart.ViewModels
         /// </summary>
         private List<EventHandler> _CanExecuteChanged = new List<EventHandler>();
 
-        public bool Executing { get; private set; }
-
         public AlgorithmViewModel()
         {
-            this.DataSet = this.DataSetGenerator(this.startingArraySize, this.startingUpperBound);
+            this.UnsortedDataset = new SeriesCollection
+            {
+                new ColumnSeries()
+            };
+            this.DataSet = new SeriesCollection
+            {
+                new ColumnSeries()
+            };
+            this.DataSetGenerator();
             this.Executing = false;
+            this.Sorted = false;
             this.PopulateAlgorithms();
         }
 
         public void PopulateAlgorithms()
         {
-            this.Algorithms = new ObservableCollection<IAlgorithm>();
-            this.Algorithms.Add(new BubbleSort());
+            this.Algorithms = new ObservableCollection<IAlgorithm>
+            {
+                new BubbleSort(),
+                new SelectionSort()
+            };
         }
 
-        // Need method to create list of buttons, each one uses this class for command, and gets title from each 
-        // algorithm dict entry. This name is passed as parameter.
-
-        private SeriesCollection DataSetGenerator(int arraySize, int upperbound)
+        public void DataSetGenerator()
         {
             Random rand = new Random();
-            ChartValues<int> list = new ChartValues<int>();
+            this.UnsortedDataset[0].Values = new ChartValues<int>();
 
-            for (int i = 0; i < arraySize; i++)
+            for (int i = 0; i < this.ArraySize; i++)
             {
-                list.Add(rand.Next(0, upperbound));
+                this.UnsortedDataset[0].Values.Add(rand.Next(0, this.UpperBound));
             }
 
-            return new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Values = list
-                }
-            };
+            // need to deep clone to this.Dataset
         }
 
         public bool CanExecute(object parameter)
@@ -95,13 +105,20 @@ namespace Algorithm_Chart.ViewModels
         {
             if (this.CanExecute(null))
             {
+                this.Executing = true;
+                if (this.Sorted)
+                {
+                    this.DataSet = this.UnsortedDataset;
+                    Thread.Sleep(1000);
+                    this.Sorted = false;
+                }
                 try
                 {
-                    this.Executing = true;
                     List<IAlgorithm> algorithmList = this.Algorithms.Where(x => x.Title == (string)parameter).ToList();
                     if (algorithmList != null)
                     {
                         Task.Run(() => algorithmList[0].Algorithm(this.DataSet, this.sortingDelay));
+                        this.Sorted = true;
                     }
                 }
                 finally
