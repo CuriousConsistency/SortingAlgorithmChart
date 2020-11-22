@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:uc="clr-namespace:Algorithm_Chart.UserControls"
-        xmlns:converters="clr-namespace:Algorithm_Chart.Converter"
+        xmlns:converters="clr-namespace:Algorithm_Chart.Converters"
         mc:Ignorable="d"
         Title="Sorting Algorithm Visualiser" MinHeight="450" MinWidth="800">
     <Window.Resources>
@@ -29,22 +29,22 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0">
-            <Label Style="{StaticResource LabelStyle}" Content="Sorting Algorithms"/>
+            <Label Style="{StaticResource TitleLabel}" Content="Sorting Algorithms"/>
             <ComboBox Name="AlgorithmsCMB" DataContext="{Binding}" ItemsSource="{Binding Path=Algorithms}" Style="{StaticResource ComboBox}" IsSynchronizedWithCurrentItem="true"/>
             <Button Style="{StaticResource ButtonStyle}" Content="Execute" DataContext="{Binding}" Command="{Binding ExecuteAlgorithmCommand}" CommandParameter="{Binding ElementName=AlgorithmsCMB, Path=SelectedValue}"/>
-            <Label Name="CounterLabel" Style="{StaticResource LabelStyle}" DataContext="{Binding }" Content="{Binding Path=Counter.FormattedCount}" Visibility="{Binding Path=Counter.CountAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
+            <Label Name="CounterLabel" Style="{StaticResource StatisticLabel}" DataContext="{Binding }" Content="{Binding Path=Counter.FormattedCount}" Visibility="{Binding Path=Counter.CountAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="1">
-            <Label Style="{StaticResource LabelStyle}" Content="Dataset Size"/>
+            <Label Style="{StaticResource TitleLabel}" Content="Dataset Size"/>
             <custom:SliderWithTickLabels DataContext="{Binding }" Style="{StaticResource SliderStyle}" Minimum="{Binding Path=MinimumArraySize}" Maximum="{Binding Path=MaximumArraySize}" 
                      Value="{Binding Path=ArraySize, Mode=TwoWay}"/>
             <Button Content="Generate New Dataset" Style="{StaticResource ButtonStyle}" Command="{Binding GenerateNewDataSetCommand }"/>
         </StackPanel>
         <StackPanel Grid.Column ="0" Grid.Row="2">
-            <Label Style="{StaticResource LabelStyle}" Content="Sorting Delay (ms)"/>
+            <Label Style="{StaticResource TitleLabel}" Content="Sorting Delay (ms)"/>
             <custom:SliderWithTickLabels DataContext="{Binding }" Style="{StaticResource SliderStyle}" Minimum="{Binding Path=MinimumSortingDelay}" Maximum="{Binding Path=MaximumSortingDelay}" 
                      Value="{Binding Path=SortingDelay, Mode=TwoWay}" TickFrequency="200"/>
-            <Label Name="TimerLabel" Style="{StaticResource LabelStyle}" DataContext="{Binding }" Content="{Binding Path=Timer.FormattedTime}" Visibility="{Binding Path=Timer.TimeAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
+            <Label Name="TimerLabel" Style="{StaticResource StatisticLabel}" DataContext="{Binding }" Content="{Binding Path=Timer.FormattedTime}" Visibility="{Binding Path=Timer.TimeAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
         </StackPanel>
         <uc:AlgorithmBarChart Style="{StaticResource GraphStyle}" Grid.Column="1" Grid.RowSpan="3" Value="{Binding DataSet}"/>
     </Grid>

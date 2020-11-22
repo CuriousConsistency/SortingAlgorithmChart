@@ -2,15 +2,15 @@
 using System.Windows.Input;
 using System.Collections.Generic;
 
-namespace Algorithm_Chart.Models
+namespace Algorithm_Chart.Commands
 {
-    public class AlgorithmRelayCommand : ICommand
+    public class RelayCommand : ICommand
     {
         private Func<bool> _canExecute;
         private Action<object> _execute;
         private event EventHandler CanExecuteChangedInternal;
 
-        public AlgorithmRelayCommand(Func<bool> canExecute, Action<object> execute)
+        public RelayCommand(Func<bool> canExecute, Action<object> execute)
         {
             this._canExecute = canExecute;
             this._execute = execute;

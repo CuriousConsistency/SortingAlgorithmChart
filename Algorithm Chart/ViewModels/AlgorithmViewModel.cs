@@ -29,11 +29,11 @@ namespace Algorithm_Chart.ViewModels
         public NoisyTimer Timer { get; private set; }
         public NoisyCounter Counter { get; private set; }
         public ICommand ExecuteAlgorithmCommand { get; private set; }
-        public GenerateNewDataSetRelayCommand GenerateNewDataSetCommand
+        public RelayCommand GenerateNewDataSetCommand
         {
             get
             {
-                return new GenerateNewDataSetRelayCommand(() => !this.GeneratingData, this.DataSetGeneratorHandler);
+                return new RelayCommand(() => !this.GeneratingData, this.DataSetGeneratorHandler);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Algorithm_Chart.ViewModels
             this.MaximumArraySize = 50;
             this.ArraySize = 20;
             this.Algorithms = new List<string>();
-            this.ExecuteAlgorithmCommand = new AlgorithmRelayCommand(() => !this.GeneratingData, AlgorithmHandler);
+            this.ExecuteAlgorithmCommand = new RelayCommand(() => !this.GeneratingData, AlgorithmHandler);
             this._Tasks = new ConcurrentBag<Task>();
             this._UpperBound = 100;
             this._TimerInterval = 50;
@@ -73,9 +73,10 @@ namespace Algorithm_Chart.ViewModels
             this.Algorithms.Add(AlgorithmConstants.BubbleSort);
             this.Algorithms.Add(AlgorithmConstants.SelectionSort);
             this.Algorithms.Add(AlgorithmConstants.MergeSort);
+            this.Algorithms.Add(AlgorithmConstants.InsertionSort);
         }
 
-        public async void DataSetGeneratorHandler()
+        public async void DataSetGeneratorHandler(object unused)
         {
             await this.TaskHandler();
             this.DataSetGenerator();
@@ -98,7 +99,7 @@ namespace Algorithm_Chart.ViewModels
 
         public void CloneUnsortedDataset()
         {
-            this.DataSet[0].Values = new ChartValues<int>(ExtensionMethods.DeepClone<int[]>(this._UnsortedDataset.ToArray()));
+            this.DataSet[0].Values = new ChartValues<int>(this._UnsortedDataset.ToArray().DeepClone());
             this.Sorted = false;
         }
 
@@ -163,6 +164,9 @@ namespace Algorithm_Chart.ViewModels
                     break;
                 case AlgorithmConstants.MergeSort:
                     await this.AlgorithmRunner(this.MergeSortDriver);
+                    break;
+                case AlgorithmConstants.InsertionSort:
+                    await this.AlgorithmRunner(this.InsertionSort);
                     break;
                 case null:
                     break;
@@ -319,10 +323,40 @@ namespace Algorithm_Chart.ViewModels
                     list[i] = tempList[rightCounter];
                     rightCounter++;
                 }
+                Thread.Sleep(this.SortingDelay);
             }
 
-            Thread.Sleep(this.SortingDelay);
             return;
+        }
+
+        private void InsertionSort(CancellationToken token)
+        {
+            ChartValues<int> dataset = (ChartValues<int>)this.DataSet[0].Values;
+            int count = dataset.Count;
+
+            for (int i = 1; i < count; i++)
+            {
+                if (dataset[i] < dataset[i - 1])
+                {
+                    for (int j = 0; j < i; j++)
+                    {
+                        this.Counter.Count++;
+                        if (dataset[i] < dataset[j])
+                        {
+                            int temp = dataset[i];
+                            dataset.RemoveAt(i);
+                            dataset.Insert(j, temp);
+                            Thread.Sleep(this.SortingDelay);
+                            break;
+                        }
+
+                        if (token.IsCancellationRequested)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
         }
     }
 }

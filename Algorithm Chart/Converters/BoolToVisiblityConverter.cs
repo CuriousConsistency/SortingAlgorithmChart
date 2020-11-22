@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace Algorithm_Chart.Converter
+namespace Algorithm_Chart.Converters
 {
     public class BoolToVisiblityConverter : IValueConverter
     {
