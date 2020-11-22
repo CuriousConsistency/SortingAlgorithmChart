@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Algorithm_Chart.Views;
 using Algorithm_Chart.ViewModels;
@@ -19,7 +15,9 @@ namespace Algorithm_Chart
         {
             base.OnStartup(e);
             AlgorithmVisualiser algorithmVisualiser = new AlgorithmVisualiser();
-            algorithmVisualiser.DataContext = new AlgorithmViewModel();
+            AlgorithmViewModel algorithmViewModel = new AlgorithmViewModel();
+            Application.Current.MainWindow.Closing += algorithmViewModel.OnWindowClosing;
+            algorithmVisualiser.DataContext = algorithmViewModel;
             algorithmVisualiser.Show();
         }
     }

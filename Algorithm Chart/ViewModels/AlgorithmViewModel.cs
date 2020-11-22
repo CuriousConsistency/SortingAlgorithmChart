@@ -1,131 +1,328 @@
 ﻿using System;
-using System.Windows.Input;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Algorithm_Chart.Models;
+using System.Windows.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
+using Algorithm_Chart.Commands;
+using Algorithm_Chart.Constants;
+using Algorithm_Chart.Extensions;
+using Algorithm_Chart.Models;
+using System.Linq;
 
 namespace Algorithm_Chart.ViewModels
 {
-    public class AlgorithmViewModel : ICommand
+    public class AlgorithmViewModel
     {
         public SeriesCollection DataSet { get; private set; }
-
-        public int MinimumArraySize { get; } = 10;
-
-        public int MaximumArraySize { get; } = 50;
-
-        private readonly int UpperBound = 100;
-
-        public int ArraySize { get; set; } = 20;
-
-        public ObservableCollection<IAlgorithm> Algorithms { get; private set; }
-
-        public bool Executing { get; private set; }
-
-        public int sortingDelay { get; private set; } = 50;
-
-        private bool Sorted;
-
-        private SeriesCollection UnsortedDataset;
-
-        /// <summary>
-        /// Occurs when changes occur that affect whether or not the command 
-        /// should execute
-        /// </summary>
-        public event EventHandler CanExecuteChanged
+        public List<string> Algorithms { get; private set; }
+        public int MinimumArraySize { get; private set; }
+        public int MaximumArraySize { get; private set; }
+        public int ArraySize { get; set; }
+        public int MaximumSortingDelay { get; private set; }
+        public int SortingDelay { get; set; }
+        public int MinimumSortingDelay { get; private set; }
+        public bool GeneratingData { get; private set; }
+        public bool Sorted { get; private set; }
+        public NoisyTimer Timer { get; private set; }
+        public NoisyCounter Counter { get; private set; }
+        public ICommand ExecuteAlgorithmCommand { get; private set; }
+        public GenerateNewDataSetRelayCommand GenerateNewDataSetCommand
         {
-            add
+            get
             {
-                _CanExecuteChanged.Add(value);
-                CommandManager.RequerySuggested += value;
-            }
-            remove
-            {
-                _CanExecuteChanged.Remove(value);
-                CommandManager.RequerySuggested -= value;
+                return new GenerateNewDataSetRelayCommand(() => !this.GeneratingData, this.DataSetGeneratorHandler);
             }
         }
 
-        /// <summary>
-        /// Used to hang on to strong references to the event handlers, as
-        /// CommandManager.RequerySuggested is static and only holds weak references
-        /// (otherwise can get inappropriately garbage collected)
-        /// </summary>
-        private List<EventHandler> _CanExecuteChanged = new List<EventHandler>();
+        private readonly int _TimerInterval;
+        private readonly int _UpperBound;
+        private ChartValues<int> _UnsortedDataset;
+        private CancellationTokenSource _TokenSource;
+        private CancellationToken _Token;
+        private ConcurrentBag<Task> _Tasks;
 
         public AlgorithmViewModel()
         {
-            this.UnsortedDataset = new SeriesCollection
-            {
-                new ColumnSeries()
-            };
             this.DataSet = new SeriesCollection
             {
                 new ColumnSeries()
             };
+
+            this.MinimumSortingDelay = 0;
+            this.MaximumSortingDelay = 1000;
+            this.SortingDelay = 500;
+            this.MinimumArraySize = 10;
+            this.MaximumArraySize = 50;
+            this.ArraySize = 20;
+            this.Algorithms = new List<string>();
+            this.ExecuteAlgorithmCommand = new AlgorithmRelayCommand(() => !this.GeneratingData, AlgorithmHandler);
+            this._Tasks = new ConcurrentBag<Task>();
+            this._UpperBound = 100;
+            this._TimerInterval = 50;
+            this.Timer = new NoisyTimer(this._TimerInterval);
+            this.Counter = new NoisyCounter();
             this.DataSetGenerator();
-            this.Executing = false;
-            this.Sorted = false;
             this.PopulateAlgorithms();
         }
 
         public void PopulateAlgorithms()
         {
-            this.Algorithms = new ObservableCollection<IAlgorithm>
-            {
-                new BubbleSort(),
-                new SelectionSort()
-            };
+            this.Algorithms.Add(AlgorithmConstants.BubbleSort);
+            this.Algorithms.Add(AlgorithmConstants.SelectionSort);
+            this.Algorithms.Add(AlgorithmConstants.MergeSort);
+        }
+
+        public async void DataSetGeneratorHandler()
+        {
+            await this.TaskHandler();
+            this.DataSetGenerator();
         }
 
         public void DataSetGenerator()
         {
+            this.GeneratingData = true;
             Random rand = new Random();
-            this.UnsortedDataset[0].Values = new ChartValues<int>();
+            this._UnsortedDataset = new ChartValues<int>();
 
             for (int i = 0; i < this.ArraySize; i++)
             {
-                this.UnsortedDataset[0].Values.Add(rand.Next(0, this.UpperBound));
+                this._UnsortedDataset.Add(rand.Next(0, this._UpperBound));
             }
 
-            // need to deep clone to this.Dataset
+            this.CloneUnsortedDataset();
+            this.GeneratingData = false;
         }
 
-        public bool CanExecute(object parameter)
+        public void CloneUnsortedDataset()
         {
-            return !this.Executing;
+            this.DataSet[0].Values = new ChartValues<int>(ExtensionMethods.DeepClone<int[]>(this._UnsortedDataset.ToArray()));
+            this.Sorted = false;
         }
 
-        public void Execute(object parameter)
+        public void CloneUnsortedDatasetIfSorted()
         {
-            if (this.CanExecute(null))
+            if (this.Sorted)
             {
-                this.Executing = true;
-                if (this.Sorted)
+                this.CloneUnsortedDataset();
+            }
+        }
+
+        public void ResetStatistics()
+        {
+            this.Counter.ResetCount();
+            this.Timer.ResetTimer();
+        }
+
+        public async Task TaskHandler()
+        {
+            try
+            {
+                if (this._Tasks.Count == 0)
                 {
-                    this.DataSet = this.UnsortedDataset;
-                    Thread.Sleep(1000);
-                    this.Sorted = false;
+                    this.SetTasksAndCancellationToken();
+                    return;
                 }
-                try
+
+                if (!this.Sorted)
                 {
-                    List<IAlgorithm> algorithmList = this.Algorithms.Where(x => x.Title == (string)parameter).ToList();
-                    if (algorithmList != null)
+                    this._TokenSource.Cancel();
+                }
+                await this._Tasks.First<Task>();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+
+            this.SetTasksAndCancellationToken();
+            this.ResetStatistics();
+        }
+
+        public void SetTasksAndCancellationToken()
+        {
+            this._Tasks = new ConcurrentBag<Task>();
+            this._TokenSource = new CancellationTokenSource();
+            this._Token = this._TokenSource.Token;
+        }
+
+        public async void AlgorithmHandler(object parmameter)
+        {
+            await this.TaskHandler();
+            this.CloneUnsortedDatasetIfSorted();
+            this.Sorted = false;
+
+            switch (parmameter.ToString())
+            {
+                case AlgorithmConstants.BubbleSort:
+                    await this.AlgorithmRunner(this.BubbleSort);
+                    break;
+                case AlgorithmConstants.SelectionSort:
+                    await this.AlgorithmRunner(this.SelectionSort);  
+                    break;
+                case AlgorithmConstants.MergeSort:
+                    await this.AlgorithmRunner(this.MergeSortDriver);
+                    break;
+                case null:
+                    break;
+            }
+
+            this.Sorted = true;
+        }
+
+        public async void OnWindowClosing(object sender, EventArgs e)
+        {
+            await this.TaskHandler();
+            if (this._TokenSource != null)
+            {
+                this. _TokenSource.Dispose();
+            }
+            this.Timer.Close();
+        }
+
+        private async Task AlgorithmRunner(Action<CancellationToken> algorithm)
+        {
+            try
+            {
+                Task task = new Task(() => algorithm(this._Token), this._Token);
+                this._Tasks.Add(task);
+                this.Timer.StartTimer();
+                task.Start();
+                await task;
+                this.Timer.EndTimer();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+
+            this._TokenSource.Dispose();
+        }
+
+        private void BubbleSort(CancellationToken token)
+        {
+            ChartValues<int> dataset = (ChartValues<int>)this.DataSet[0].Values;
+            int count = dataset.Count;
+            for (int i = 0; i < count; i++)
+            {
+                for (int j = 0; j < count - i - 1; j++)
+                {
+                    this.Counter.Count++;
+                    if (dataset[j] >= dataset[j + 1])
                     {
-                        Task.Run(() => algorithmList[0].Algorithm(this.DataSet, this.sortingDelay));
-                        this.Sorted = true;
+                        int holder = dataset[j + 1];
+                        dataset[j + 1] = dataset[j];
+                        dataset[j] = holder;
+                        Thread.Sleep(this.SortingDelay);
+                    }
+
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
                     }
                 }
-                finally
+            }
+        }
+        private void SelectionSort(CancellationToken token)
+        {
+            ChartValues<int> dataset = (ChartValues<int>)this.DataSet[0].Values;
+            int count = dataset.Count;
+            for (int i = 0; i < count; i++)
+            {
+                int lowestValue = dataset[i];
+                int position = i;
+                bool sortOccur = false;
+
+                for (int j = i; j < count; j++)
                 {
-                    this.Executing = false;
+                    this.Counter.Count++;
+                    if (dataset[j] <= lowestValue)
+                    {
+                        lowestValue = dataset[j];
+                        position = j;
+                        sortOccur = true;
+                    }
+
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                }
+
+                if (sortOccur)
+                {
+                    int holder = dataset[i];
+                    dataset[i] = lowestValue;
+                    dataset[position] = holder;
+                    Thread.Sleep(this.SortingDelay);
                 }
             }
+        }
+
+        private void MergeSortDriver(CancellationToken token)
+        {
+            this.Merge((ChartValues<int>)this.DataSet[0].Values, 0, this.DataSet[0].Values.Count-1, token);
+        }
+
+        private void Merge(ChartValues<int> list, int listStartPoint, int listEndPoint, CancellationToken token)
+        {
+            int midPoint = (listEndPoint - listStartPoint) / 2 + listStartPoint;
+            
+            if (listStartPoint < midPoint)
+            {
+                this.Merge(list, listStartPoint, midPoint, token);
+            }
+
+            if (midPoint + 1 < listEndPoint)
+            {
+                this.Merge(list, midPoint + 1, listEndPoint, token);
+            }
+
+            this.MergeSort(list, listStartPoint, midPoint, listEndPoint, token);
+        }
+
+        private void MergeSort(ChartValues<int> list, int startPoint, int midPoint, int endPoint, CancellationToken token)
+        {
+            ChartValues<int> tempList = new ChartValues<int>(list.ToArray().DeepClone());
+            int leftCounter = startPoint;
+            int rightCounter = midPoint + 1;
+
+            for (int i = startPoint; i < endPoint + 1; i++)
+            {
+                this.Counter.Count++;
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                if (leftCounter == midPoint + 1)
+                {
+                    list[i] = tempList[rightCounter];
+                    rightCounter++;
+                    continue;
+                }
+
+                if (rightCounter == endPoint + 1)
+                {
+                    list[i] = tempList[leftCounter];
+                    leftCounter++;
+                    continue;
+                }
+
+                if (tempList[leftCounter] <= tempList[rightCounter])
+                {
+                    list[i] = tempList[leftCounter];
+                    leftCounter++;
+                }
+                else
+                {
+                    list[i] = tempList[rightCounter];
+                    rightCounter++;
+                }
+            }
+
+            Thread.Sleep(this.SortingDelay);
+            return;
         }
     }
 }

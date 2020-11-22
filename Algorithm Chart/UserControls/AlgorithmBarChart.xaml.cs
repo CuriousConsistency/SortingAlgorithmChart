@@ -22,6 +22,7 @@ namespace Algorithm_Chart.UserControls
         {
             InitializeComponent();
             this.chart.DataContext = this;
+            this.IsEnabled = false;
         }
     }
 }
