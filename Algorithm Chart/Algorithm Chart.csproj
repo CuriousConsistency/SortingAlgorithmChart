@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>SortingAlgorithmIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -91,8 +94,17 @@
     <Compile Include="Converters\BoolToVisiblityConverter.cs" />
     <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Models\AlgorithmStatistics.cs" />
+    <Compile Include="Models\Algorithms\BubbleSort.cs" />
+    <Compile Include="Models\Algorithms\InsertionSort.cs" />
+    <Compile Include="Models\Algorithms\MergeSort.cs" />
+    <Compile Include="Models\Algorithms\QuickSort.cs" />
+    <Compile Include="Models\Algorithms\SelectionSort.cs" />
+    <Compile Include="Models\Algorithms\AbstractSortingAlgorithm.cs" />
+    <Compile Include="Models\Algorithms\ShellSort.cs" />
     <Compile Include="Models\NoisyCounter.cs" />
     <Compile Include="Models\NoisyTimer.cs" />
+    <Compile Include="Models\SortingInfo.cs" />
     <Compile Include="UserControls\AlgorithmBarChart.xaml.cs">
       <DependentUpon>AlgorithmBarChart.xaml</DependentUpon>
     </Compile>
@@ -134,8 +146,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Models\Algorithms\" />
+    <Resource Include="Icon\SortingAlgorithmIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SortingAlgorithmIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

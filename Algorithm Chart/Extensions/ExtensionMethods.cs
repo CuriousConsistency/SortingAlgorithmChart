@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System;
+using LiveCharts;
 
 namespace Algorithm_Chart.Extensions
 {
@@ -14,6 +16,22 @@ namespace Algorithm_Chart.Extensions
                 stream.Position = 0;
                 return (T)formatter.Deserialize(stream);
             }
+        }
+
+        public static ChartValues<int> GetRange(ChartValues<int> list, int start, int end)
+        {
+            if (start > end)
+            {
+                throw new ArgumentOutOfRangeException($"Start list index {start} is greater than end list index {end}");
+            }
+            ChartValues<int> shortenedlist = new ChartValues<int>();
+
+            for (int i = start; i < end + 1; i++)
+            {
+                shortenedlist.Add(list[i]);
+            }
+
+            return shortenedlist;
         }
     }
 }

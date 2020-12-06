@@ -26,26 +26,37 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.Row="0">
-            <Label Style="{StaticResource TitleLabel}" Content="Sorting Algorithms"/>
-            <ComboBox Name="AlgorithmsCMB" DataContext="{Binding}" ItemsSource="{Binding Path=Algorithms}" Style="{StaticResource ComboBox}" IsSynchronizedWithCurrentItem="true"/>
-            <Button Style="{StaticResource ButtonStyle}" Content="Execute" DataContext="{Binding}" Command="{Binding ExecuteAlgorithmCommand}" CommandParameter="{Binding ElementName=AlgorithmsCMB, Path=SelectedValue}"/>
-            <Label Name="CounterLabel" Style="{StaticResource StatisticLabel}" DataContext="{Binding }" Content="{Binding Path=Counter.FormattedCount}" Visibility="{Binding Path=Counter.CountAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
-        </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="1">
-            <Label Style="{StaticResource TitleLabel}" Content="Dataset Size"/>
-            <custom:SliderWithTickLabels DataContext="{Binding }" Style="{StaticResource SliderStyle}" Minimum="{Binding Path=MinimumArraySize}" Maximum="{Binding Path=MaximumArraySize}" 
-                     Value="{Binding Path=ArraySize, Mode=TwoWay}"/>
-            <Button Content="Generate New Dataset" Style="{StaticResource ButtonStyle}" Command="{Binding GenerateNewDataSetCommand }"/>
-        </StackPanel>
-        <StackPanel Grid.Column ="0" Grid.Row="2">
-            <Label Style="{StaticResource TitleLabel}" Content="Sorting Delay (ms)"/>
-            <custom:SliderWithTickLabels DataContext="{Binding }" Style="{StaticResource SliderStyle}" Minimum="{Binding Path=MinimumSortingDelay}" Maximum="{Binding Path=MaximumSortingDelay}" 
-                     Value="{Binding Path=SortingDelay, Mode=TwoWay}" TickFrequency="200"/>
-            <Label Name="TimerLabel" Style="{StaticResource StatisticLabel}" DataContext="{Binding }" Content="{Binding Path=Timer.FormattedTime}" Visibility="{Binding Path=Timer.TimeAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
-        </StackPanel>
-        <uc:AlgorithmBarChart Style="{StaticResource GraphStyle}" Grid.Column="1" Grid.RowSpan="3" Value="{Binding DataSet}"/>
+        <UniformGrid Grid.Column="0" Columns="1" Grid.Row="0">
+            <StackPanel Style="{StaticResource StackPanelStyle}">
+                <Label Style="{StaticResource TitleLabel}" Content="Sorting Algorithms"/>
+                <ComboBox Name="AlgorithmsCMB" DataContext="{Binding}" ItemsSource="{Binding Path=AlgorithmNames}" Style="{StaticResource ComboBox}" IsSynchronizedWithCurrentItem="true"/>
+                <Button Style="{StaticResource ButtonStyle}" Content="Execute" DataContext="{Binding}" Command="{Binding ExecuteAlgorithmCommand}" CommandParameter="{Binding ElementName=AlgorithmsCMB, Path=SelectedValue}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource StackPanelStyle}">
+                <Label Style="{StaticResource TitleLabel}" Content="Dataset Size"/>
+                <custom:SliderWithTickLabels DataContext="{Binding }" Style="{StaticResource SliderStyle}" Minimum="{Binding Path=MinimumArraySize}" Maximum="{Binding Path=MaximumArraySize}" 
+                    Value="{Binding Path=ArraySize, Mode=TwoWay}"/>
+                <Button Content="Generate New Dataset" Style="{StaticResource ButtonStyle}" Command="{Binding GenerateNewDataSetCommand }"/>
+            </StackPanel>
+        </UniformGrid>
+        <UniformGrid Grid.Column="0" Columns="1" Grid.Row="1">
+            <StackPanel Style="{StaticResource StackPanelStyle}">
+                <Label Style="{StaticResource TitleLabel}" Content="Sorting Delay (ms)"/>
+                <custom:SliderWithTickLabels DataContext="{Binding }" Style="{StaticResource SliderStyle}" Minimum="{Binding Path=MinimumSortingDelay}" Maximum="{Binding Path=MaximumSortingDelay}" 
+                    Value="{Binding Path=SortingInfo.SortingDelay, Mode=TwoWay}" TickFrequency="200"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource StackPanelStyle}">
+                <Label Style="{StaticResource TitleLabel}" Content="Statistics" DataContext="{Binding }" Visibility="{Binding Path=Counter.CountAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
+                <UniformGrid Rows="1">
+                    <Label Name="BestCaseLabel" Style="{StaticResource AlgorithmStatisticLabel}" DataContext="{Binding }" Content="{Binding Path=AlgorithmStatistics.BestCase}"/>
+                    <Label Name="AverageCaseLabel" Style="{StaticResource AlgorithmStatisticLabel}" DataContext="{Binding }" Content="{Binding Path=AlgorithmStatistics.AverageCase}"/>
+                    <Label Name="WorstCaseLabel" Style="{StaticResource AlgorithmStatisticLabel}" DataContext="{Binding }" Content="{Binding Path=AlgorithmStatistics.WorstCase}"/>
+                </UniformGrid>
+                <Label Name="CounterLabel" Style="{StaticResource StatisticLabel}" DataContext="{Binding }" Content="{Binding Path=Counter.FormattedCount}" Visibility="{Binding Path=Counter.CountAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
+                <Label Name="TimerLabel" Style="{StaticResource StatisticLabel}" DataContext="{Binding }" Content="{Binding Path=Timer.FormattedTime}" Visibility="{Binding Path=Timer.TimeAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisiblityConverter }}"/>
+            </StackPanel>
+        </UniformGrid>
+        <uc:AlgorithmBarChart Style="{StaticResource GraphStyle}" Grid.Column="1" Grid.RowSpan="2" Value="{Binding DataSet}"/>
     </Grid>
 </Window>

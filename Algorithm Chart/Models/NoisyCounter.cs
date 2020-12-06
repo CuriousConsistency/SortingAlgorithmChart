@@ -36,10 +36,6 @@ namespace Algorithm_Chart.Models
             }
         }
 
-        public NoisyCounter()
-        {
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void ResetCount()

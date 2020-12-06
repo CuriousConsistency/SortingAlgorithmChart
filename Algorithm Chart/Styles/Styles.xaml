@@ -3,8 +3,13 @@
     <Style x:Key="ButtonStyle" TargetType="Button">
         <Style.Setters>
             <Setter Property="MinHeight" Value="20"/>
-            <Setter Property="Margin" Value="10,10,10,5"/>
+            <Setter Property="Margin" Value="10,10,10,0"/>
             <Setter Property="Width" Value="auto"/>
+        </Style.Setters>
+    </Style>
+    <Style x:Key="StackPanelStyle" TargetType="StackPanel">
+        <Style.Setters>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style.Setters>
     </Style>
     <Style x:Key="GraphStyle" TargetType="UserControl">
@@ -14,7 +19,7 @@
     </Style>
     <Style x:Key="SliderStyle" TargetType="Slider">
         <Style.Setters>
-            <Setter Property="Margin" Value="10,10,10,5"/>
+            <Setter Property="Margin" Value="10,10,10,0"/>
             <Setter Property="Orientation" Value="Horizontal"/>
             <Setter Property="TickPlacement" Value="TopLeft"/>
             <Setter Property="TickFrequency" Value="5"/>
@@ -32,15 +37,23 @@
     </Style>
     <Style x:Key="StatisticLabel" TargetType="Label">
         <Style.Setters>
-            <Setter Property="Margin" Value="10,10,10,5"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style.Setters>
+    </Style>
+    <Style x:Key="AlgorithmStatisticLabel" TargetType="Label">
+        <Style.Setters>
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style.Setters>
     </Style>
     <Style x:Key="TitleLabel" TargetType="Label">
         <Style.Setters>
-            <Setter Property="Margin" Value="10,10,10,5"/>
+            <Setter Property="Margin" Value="10,20,10,0"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -48,7 +61,7 @@
     </Style>
     <Style x:Key="ComboBox" TargetType="ComboBox">
         <Style.Setters>
-            <Setter Property="Margin" Value="10,10,10,5"/>
+            <Setter Property="Margin" Value="10,10,10,0"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style.Setters>
     </Style>
