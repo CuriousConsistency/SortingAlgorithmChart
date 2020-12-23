@@ -4,9 +4,10 @@ using LiveCharts;
 
 namespace Algorithm_Chart.Models.Algorithms
 {
-    public class ShellSort : AbstractSortingAlgorithm
+    public class ShellSort : BaseSortingAlgorithm
     {
-        public ShellSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) : base(sortingInfo, counter, dataset)
+        public ShellSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) 
+            : base(sortingInfo, counter, dataset)
         {
         }
 
@@ -18,18 +19,17 @@ namespace Algorithm_Chart.Models.Algorithms
             this.WorstCase = $"{Worst} n";
         }
 
-        public override void InitialiseSort(CancellationToken token)
+        public override void Sort()
         {
-            this.Token = token;
-            this.Sort(this.Dataset.Count > 15 == true ? 5 : 3);
+            this.PreInsertionSort(this.Dataset.Count > 15 == true ? 5 : 3);
         }
 
-        public void Sort(int gap)
+        public void PreInsertionSort(int gap)
         {
             this.InsertionSort(gap);
             if (gap > 1)
             {
-                this.Sort(gap -= 2);
+                this.PreInsertionSort(gap -= 2);
             }        
         }
 

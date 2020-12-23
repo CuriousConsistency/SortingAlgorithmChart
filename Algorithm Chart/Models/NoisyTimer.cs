@@ -66,6 +66,17 @@ namespace Algorithm_Chart.Models
             this._Timer.AutoReset = true;
         }
 
+        public void PauseTimer()
+        {
+            this._Timer.Stop();
+        }
+
+        public void ResumeTimer()
+        {
+            this._Timer.Enabled = true;
+            this._Timer.AutoReset = true;
+        }
+
         public void EndTimer()
         {
             this._Timer.Stop();

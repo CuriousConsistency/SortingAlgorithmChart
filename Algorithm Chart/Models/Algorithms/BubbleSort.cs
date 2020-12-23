@@ -1,12 +1,14 @@
 ﻿using Algorithm_Chart.Constants;
 using System.Threading;
+using System.Threading.Tasks;
 using LiveCharts;
 
 namespace Algorithm_Chart.Models.Algorithms
 {
-    public class BubbleSort : AbstractSortingAlgorithm
+    public class BubbleSort : BaseSortingAlgorithm
     {
-        public BubbleSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) : base(sortingInfo, counter, dataset)
+        public BubbleSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) 
+            : base(sortingInfo, counter, dataset)
         {
         }
 
@@ -18,7 +20,7 @@ namespace Algorithm_Chart.Models.Algorithms
             this.WorstCase = $"{Worst} n";
         }
 
-        public override void InitialiseSort(CancellationToken token)
+        public override void Sort()
         {
             int count = this.Dataset.Count;
             for (int i = 0; i < count; i++)
@@ -34,7 +36,15 @@ namespace Algorithm_Chart.Models.Algorithms
                         Thread.Sleep(this.SortingInfo.SortingDelay);
                     }
 
-                    if (token.IsCancellationRequested)
+                    if (this.AlgorithmStatus == TaskStatus.WaitingToRun)
+                    {
+                        while(this.AlgorithmStatus != TaskStatus.Running)
+                        {
+                            Task.Delay(50);
+                        }
+                    }
+
+                    if (this.Token.IsCancellationRequested)
                     {
                         return;
                     }

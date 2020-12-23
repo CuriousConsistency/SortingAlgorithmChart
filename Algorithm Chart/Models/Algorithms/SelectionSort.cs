@@ -4,9 +4,10 @@ using LiveCharts;
 
 namespace Algorithm_Chart.Models.Algorithms
 {
-    public class SelectionSort : AbstractSortingAlgorithm
+    public class SelectionSort : BaseSortingAlgorithm
     {
-        public SelectionSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) : base(sortingInfo, counter, dataset)
+        public SelectionSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) 
+            : base(sortingInfo, counter, dataset)
         {
         }
 
@@ -18,7 +19,7 @@ namespace Algorithm_Chart.Models.Algorithms
             this.WorstCase = $"{Worst} n^2";
         }
 
-        public override void InitialiseSort(CancellationToken token)
+        public override void Sort()
         {
             int count = this.Dataset.Count;
             for (int i = 0; i < count; i++)
@@ -37,7 +38,7 @@ namespace Algorithm_Chart.Models.Algorithms
                         sortOccur = true;
                     }
 
-                    if (token.IsCancellationRequested)
+                    if (this.Token.IsCancellationRequested)
                     {
                         return;
                     }

@@ -6,9 +6,10 @@ using System.Linq;
 
 namespace Algorithm_Chart.Models.Algorithms
 {
-    public class MergeSort : AbstractSortingAlgorithm
+    public class MergeSort : BaseSortingAlgorithm
     {
-        public MergeSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) : base(sortingInfo, counter, dataset)
+        public MergeSort(SortingInfo sortingInfo, NoisyCounter counter, ChartValues<int> dataset) 
+            : base(sortingInfo, counter, dataset)
         {
         }
 
@@ -20,9 +21,8 @@ namespace Algorithm_Chart.Models.Algorithms
             this.WorstCase = $"{Worst} nlog(n)";
         }
 
-        public override void InitialiseSort(CancellationToken token)
+        public override void Sort()
         {
-            this.Token = token;
             this.Merge(this.Dataset, 0, this.Dataset.Count - 1);
         }
 

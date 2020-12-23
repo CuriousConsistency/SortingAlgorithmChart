@@ -104,6 +104,7 @@
     <Compile Include="Models\Algorithms\ShellSort.cs" />
     <Compile Include="Models\NoisyCounter.cs" />
     <Compile Include="Models\NoisyTimer.cs" />
+    <Compile Include="Models\AlgorithmStatus.cs" />
     <Compile Include="Models\SortingInfo.cs" />
     <Compile Include="UserControls\AlgorithmBarChart.xaml.cs">
       <DependentUpon>AlgorithmBarChart.xaml</DependentUpon>
