@@ -1,5 +1,6 @@
 ﻿using Algorithm_Chart.Constants;
 using System.Threading;
+using System.Threading.Tasks;
 using LiveCharts;
 
 namespace Algorithm_Chart.Models.Algorithms
@@ -34,6 +35,14 @@ namespace Algorithm_Chart.Models.Algorithms
                     this.Dataset[j - 1] = temp;
                     Thread.Sleep(this.SortingInfo.SortingDelay);
                     j--;
+
+                    if (this.AlgorithmStatus == TaskStatus.WaitingToRun)
+                    {
+                        while (this.AlgorithmStatus != TaskStatus.Running)
+                        {
+                            Task.Delay(50);
+                        }
+                    }
 
                     if (this.Token.IsCancellationRequested)
                     {

@@ -1,5 +1,6 @@
 ﻿using Algorithm_Chart.Constants;
 using System.Threading;
+using System.Threading.Tasks;
 using LiveCharts;
 using Algorithm_Chart.Extensions;
 using System.Linq;
@@ -52,6 +53,15 @@ namespace Algorithm_Chart.Models.Algorithms
             for (int i = startPoint; i < endPoint + 1; i++)
             {
                 this.Counter.Count++;
+
+                if (this.AlgorithmStatus == TaskStatus.WaitingToRun)
+                {
+                    while (this.AlgorithmStatus != TaskStatus.Running)
+                    {
+                        Task.Delay(50);
+                    }
+                }
+
                 if (this.Token.IsCancellationRequested)
                 {
                     return;
