@@ -92,19 +92,20 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Converters\BoolToVisiblityConverter.cs" />
+    <Compile Include="Converters\ExecuteAlgorithmConverter.cs" />
     <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Models\AlgorithmStatistics.cs" />
+    <Compile Include="Models\AlgorithmStatus.cs" />
     <Compile Include="Models\Algorithms\BubbleSort.cs" />
     <Compile Include="Models\Algorithms\InsertionSort.cs" />
     <Compile Include="Models\Algorithms\MergeSort.cs" />
     <Compile Include="Models\Algorithms\QuickSort.cs" />
     <Compile Include="Models\Algorithms\SelectionSort.cs" />
-    <Compile Include="Models\Algorithms\AbstractSortingAlgorithm.cs" />
+    <Compile Include="Models\Algorithms\BaseSortingAlgorithm.cs" />
     <Compile Include="Models\Algorithms\ShellSort.cs" />
     <Compile Include="Models\NoisyCounter.cs" />
     <Compile Include="Models\NoisyTimer.cs" />
-    <Compile Include="Models\AlgorithmStatus.cs" />
     <Compile Include="Models\SortingInfo.cs" />
     <Compile Include="UserControls\AlgorithmBarChart.xaml.cs">
       <DependentUpon>AlgorithmBarChart.xaml</DependentUpon>
@@ -147,12 +148,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Resource Include="Icon\SortingAlgorithmIcon.ico" />
-  </ItemGroup>
   <ItemGroup>
     <Resource Include="SortingAlgorithmIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\SortingAlgorithmIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -24,14 +24,6 @@ C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.baml
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.g.cs
 C:\Users\JenningsSe\Documents\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csprojAssemblyReference.cache
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.baml
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Styles\Styles.baml
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.g.cs
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Views\AlgorithmVisualiser.g.cs
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\App.g.cs
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\GeneratedInternalTypeHelper.g.cs
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart_MarkupCompile.cache
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart_MarkupCompile.lref
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\Algorithm Chart.exe.config
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\Algorithm Chart.exe
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\Algorithm Chart.pdb
@@ -42,6 +34,15 @@ C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bi
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\LiveCharts.xml
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\LiveCharts.Wpf.pdb
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\LiveCharts.Wpf.xml
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csprojAssemblyReference.cache
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.baml
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Styles\Styles.baml
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\UserControls\AlgorithmBarChart.g.cs
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Views\AlgorithmVisualiser.g.cs
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\App.g.cs
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart_MarkupCompile.cache
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart_MarkupCompile.lref
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Views\AlgorithmVisualiser.baml
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.g.resources
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm_Chart.Properties.Resources.resources
@@ -50,4 +51,3 @@ C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\ob
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csproj.CopyComplete
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.exe
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.pdb
-C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csprojAssemblyReference.cache

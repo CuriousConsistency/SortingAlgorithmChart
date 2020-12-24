@@ -15,6 +15,9 @@
                 <ResourceDictionary>
                     <converters:BoolToVisiblityConverter x:Key="BoolToVisiblityConverter"/>
                 </ResourceDictionary>
+                <ResourceDictionary>
+                    <converters:ExecuteAlgorithmConverter x:Key="ExecuteAlgorithmConverter"/>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary> 
     </Window.Resources>
@@ -31,7 +34,15 @@
             <StackPanel Style="{StaticResource StackPanelStyle}">
                 <Label Style="{StaticResource TitleLabel}" Content="Sorting Algorithms"/>
                 <ComboBox Name="AlgorithmsCMB" DataContext="{Binding}" ItemsSource="{Binding Path=AlgorithmNames}" Style="{StaticResource ComboBox}" IsSynchronizedWithCurrentItem="true"/>
-                <Button Style="{StaticResource ButtonStyle}" Content="Execute" DataContext="{Binding}" Command="{Binding ExecuteAlgorithmCommand}" CommandParameter="{Binding ElementName=AlgorithmsCMB, Path=SelectedValue}"/>
+                <Button Style="{StaticResource ButtonStyle}" DataContext="{Binding}" Command="{Binding ExecuteAlgorithmCommand}" CommandParameter="{Binding ElementName=AlgorithmsCMB, Path=SelectedValue}">
+                    <Button.Content>
+                        <MultiBinding Converter="{StaticResource ExecuteAlgorithmConverter}" UpdateSourceTrigger="PropertyChanged">
+                            <Binding ElementName="AlgorithmsCMB" Path="SelectedValue"/>
+                            <Binding Path="AlgorithmStatistics.ExecutingAlgorithm"/>
+                            <Binding Path="AlgorithmStatus.TaskStatus"/>
+                        </MultiBinding>
+                    </Button.Content>
+                </Button>
             </StackPanel>
             <StackPanel Style="{StaticResource StackPanelStyle}">
                 <Label Style="{StaticResource TitleLabel}" Content="Dataset Size"/>

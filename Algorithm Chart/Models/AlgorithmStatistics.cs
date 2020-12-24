@@ -4,11 +4,17 @@ namespace Algorithm_Chart.Models
 {
     public class AlgorithmStatistics : INotifyPropertyChanged
     {
-        public string bestCase;
-        public string averageCase;
-        public string worstCase;
+        private string bestCase;
+        private string averageCase;
+        private string worstCase;
+        private string executingAlgorithm;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public AlgorithmStatistics()
+        {
+            this.executingAlgorithm = string.Empty;
+        }
 
         public string BestCase
         {
@@ -49,11 +55,26 @@ namespace Algorithm_Chart.Models
             }
         }
 
+        public string ExecutingAlgorithm
+        {
+            get
+            {
+                return this.executingAlgorithm;
+            }
+            set
+            {
+                this.executingAlgorithm = value;
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.executingAlgorithm)));
+            }
+        }
+
+
         public void ResetStatistics()
         {
             this.BestCase = string.Empty;
             this.AverageCase = string.Empty;
             this.WorstCase = string.Empty;
+            this.executingAlgorithm = string.Empty;
         }
     }
 }

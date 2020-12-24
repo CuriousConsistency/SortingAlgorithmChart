@@ -27,6 +27,7 @@ namespace Algorithm_Chart.ViewModels
         public NoisyTimer Timer { get; private set; }
         public NoisyCounter Counter { get; private set; }
         public AlgorithmStatistics AlgorithmStatistics { get; private set; }
+        public AlgorithmStatus AlgorithmStatus { get; private set; }
         public RelayCommand ExecuteAlgorithmCommand
         {
             get
@@ -47,9 +48,7 @@ namespace Algorithm_Chart.ViewModels
         private ChartValues<int> unsortedDataset;
         private CancellationTokenSource tokenSource;
         private CancellationToken token;
-        private TaskStatus algorithmStatus;
         private Task task;
-        private string executingAlgorithm;
 
         public AlgorithmViewModel()
         {
@@ -70,7 +69,10 @@ namespace Algorithm_Chart.ViewModels
             this.timerInterval = 50;
             this.Timer = new NoisyTimer(this.timerInterval);
             this.AlgorithmStatistics = new AlgorithmStatistics();
-            this.algorithmStatus = TaskStatus.WaitingForActivation;
+            this.AlgorithmStatus = new AlgorithmStatus
+            {
+                TaskStatus = TaskStatus.WaitingForActivation
+            };
             this.upperBound = 100;
 
             this.DataSetGenerator();
@@ -112,8 +114,8 @@ namespace Algorithm_Chart.ViewModels
 
                 if (!this.SortingInfo.Sorted)
                 {
-                    this.algorithmStatus = TaskStatus.Running;
-                    this.Algorithms.Find(a => a.Title == this.executingAlgorithm).AlgorithmStatus = this.algorithmStatus;
+                    this.AlgorithmStatus.TaskStatus = TaskStatus.Running;
+                    this.Algorithms.Find(a => a.Title == this.AlgorithmStatistics.ExecutingAlgorithm).AlgorithmStatus = this.AlgorithmStatus.TaskStatus;
                     this.tokenSource.Cancel();
                 }
 
@@ -182,24 +184,25 @@ namespace Algorithm_Chart.ViewModels
             this.AlgorithmStatistics.BestCase = sortingAlgorithm.BestCase;
             this.AlgorithmStatistics.AverageCase = sortingAlgorithm.AverageCase;
             this.AlgorithmStatistics.WorstCase = sortingAlgorithm.WorstCase;
+            this.AlgorithmStatistics.ExecutingAlgorithm = sortingAlgorithm.Title;
         }
 
         public async void AlgorithmHandler(object parmameter)
         {
             string algorithm = parmameter.ToString();
 
-            if (this.algorithmStatus == TaskStatus.Running && this.task != null && algorithm == this.executingAlgorithm)
+            if (this.AlgorithmStatus.TaskStatus == TaskStatus.Running && this.task != null && algorithm == this.AlgorithmStatistics.ExecutingAlgorithm)
             {
-                this.algorithmStatus = TaskStatus.WaitingToRun;
-                this.Algorithms.Find(a => a.Title == algorithm).AlgorithmStatus = this.algorithmStatus;
+                this.AlgorithmStatus.TaskStatus = TaskStatus.WaitingToRun;
+                this.Algorithms.Find(a => a.Title == algorithm).AlgorithmStatus = this.AlgorithmStatus.TaskStatus;
                 this.Timer.PauseTimer();
                 return;
             }
 
-            if (this.algorithmStatus == TaskStatus.WaitingToRun && this.task != null && algorithm == this.executingAlgorithm)
+            if (this.AlgorithmStatus.TaskStatus == TaskStatus.WaitingToRun && this.task != null && algorithm == this.AlgorithmStatistics.ExecutingAlgorithm)
             {
-                this.algorithmStatus = TaskStatus.Running;
-                this.Algorithms.Find(a => a.Title == algorithm).AlgorithmStatus = this.algorithmStatus;
+                this.AlgorithmStatus.TaskStatus = TaskStatus.Running;
+                this.Algorithms.Find(a => a.Title == algorithm).AlgorithmStatus = this.AlgorithmStatus.TaskStatus;
                 this.Timer.ResumeTimer();
                 return;
             }
@@ -209,13 +212,12 @@ namespace Algorithm_Chart.ViewModels
             this.SortingInfo.Sorted = false;
 
             BaseSortingAlgorithm sortingAlgorithm = this.Algorithms.Find(a => a.Title == algorithm);
-            this.executingAlgorithm = sortingAlgorithm.Title;
             sortingAlgorithm.Dataset = (ChartValues<int>)this.DataSet[0].Values;
             this.SetAlgorithmStatistics(sortingAlgorithm);
 
             await this.AlgorithmRunner(sortingAlgorithm.InitialiseSort);
             this.SortingInfo.Sorted = true;
-            this.executingAlgorithm = string.Empty;
+            this.AlgorithmStatistics.ExecutingAlgorithm = string.Empty;
         }
 
         private async Task AlgorithmRunner(Action<CancellationToken> algorithm)
@@ -225,7 +227,7 @@ namespace Algorithm_Chart.ViewModels
                 this.task = new Task(() => algorithm(this.token), this.token);
                 this.Timer.StartTimer();
                 this.task.Start();
-                this.algorithmStatus = TaskStatus.Running;
+                this.AlgorithmStatus.TaskStatus = TaskStatus.Running;
                 await this.task;
                 this.Timer.EndTimer();
             }
@@ -234,7 +236,7 @@ namespace Algorithm_Chart.ViewModels
             }
             finally
             {
-                this.algorithmStatus = TaskStatus.RanToCompletion;
+                this.AlgorithmStatus.TaskStatus = TaskStatus.RanToCompletion;
                 this.tokenSource.Dispose();
             }
         }
