@@ -21,7 +21,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary> 
     </Window.Resources>
-    <Grid ShowGridLines="false">
+    <Grid Style="{StaticResource MainGrid}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Style="{StaticResource ButtonColumn}"></ColumnDefinition>
             <ColumnDefinition Style="{StaticResource GraphColumn}"></ColumnDefinition>

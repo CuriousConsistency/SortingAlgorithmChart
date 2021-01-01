@@ -65,4 +65,10 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style.Setters>
     </Style>
+    <Style x:Key="MainGrid" TargetType="Grid">
+        <Style.Setters>
+            <Setter Property="ShowGridLines" Value="False"/>
+            <Setter Property="Margin" Value="10,10,10,40"/>
+        </Style.Setters>
+    </Style>
 </ResourceDictionary>

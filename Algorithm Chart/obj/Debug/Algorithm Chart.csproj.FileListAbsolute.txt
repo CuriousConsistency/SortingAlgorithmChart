@@ -51,3 +51,7 @@ C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\ob
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.csproj.CopyComplete
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.exe
 C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.pdb
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\Algorithm Chart.exe.manifest
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\bin\Debug\Algorithm Chart.application
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.exe.manifest
+C:\Users\seanj\Source\Repos\CuriousConsistency\AlgorithmChart\Algorithm Chart\obj\Debug\Algorithm Chart.application
