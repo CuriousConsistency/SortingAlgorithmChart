@@ -97,38 +97,31 @@ namespace Sorting_Algorithm_Chart.ViewModels
 
         public async Task TaskHandler()
         {
-            try
-            {
-                if (this.task is null)
-                {
-                    this.SetTasksAndCancellationToken();
-                    return;
-                }
-
-                if (this.task.Status == TaskStatus.Faulted || 
-                    this.task.Status == TaskStatus.RanToCompletion)
-                {
-                    this.SetTasksAndCancellationToken();
-                    return;
-                }
-
-                if (!this.SortingInfo.Sorted)
-                {
-                    this.AlgorithmStatus.TaskStatus = TaskStatus.Running;
-                    this.Algorithms.Find(a => a.Title == this.AlgorithmStatistics.ExecutingAlgorithm).AlgorithmStatus = this.AlgorithmStatus.TaskStatus;
-                    this.tokenSource.Cancel();
-                }
-
-                await this.task;
-            }
-            catch (OperationCanceledException)
-            {
-            }
-            finally
+            if (this.task is null)
             {
                 this.SetTasksAndCancellationToken();
-                this.ResetStatistics();
+                return;
             }
+
+            if (this.task.Status == TaskStatus.Faulted ||
+                this.task.Status == TaskStatus.RanToCompletion)
+            {
+                this.SetTasksAndCancellationToken();
+                return;
+            }
+
+            if (!this.SortingInfo.Sorted)
+            {
+                this.AlgorithmStatus.TaskStatus = TaskStatus.Running;
+                this.Algorithms.Find(a => a.Title == this.AlgorithmStatistics.ExecutingAlgorithm).AlgorithmStatus = this.AlgorithmStatus.TaskStatus;
+                this.tokenSource.Cancel();
+            }
+
+            await this.task;
+
+            this.SetTasksAndCancellationToken();
+            this.ResetStatistics();
+
         }
 
         public void SetTasksAndCancellationToken()
